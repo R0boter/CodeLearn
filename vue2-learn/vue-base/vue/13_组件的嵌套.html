@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>组件的嵌套</title>
+</head>
+
+<body>
+  <div id="app">
+    <html-a></html-a>
+    <html-b></html-b>
+
+  </div>
+
+  <script src="./js/vue.js"></script>
+  <script>
+    Vue.config.productionTip = false;
+
+
+    // 独立子组件
+    // 不使用 Vue.extend 实例一个组件，直接定义一个对象，在使用 component 注册时也会自动调用 Vue.extend
+    const childComponent = {
+      data() {
+        return {
+          message: "------独立子组件",
+        }
+      },
+      template: `
+        <div>
+          {{message}}
+        </div>
+      `
+    }
+
+    // 1号父组件
+    Vue.component('html-a', {
+      data() {
+        return {
+          message: "1号父组件"
+        }
+      },
+      // 注意:模板中只能有一个根元素,所以应该使用一个 div 将所有元素包裹
+      // 嵌套的子组件,遵循在哪注册,在哪调用,因此只能在父组件的模板中调用
+      template: `
+      <div>
+        <div>{{message}}</div>
+        <html-a-child></html-a-child>
+        <html-child></html-child>
+      </div>
+
+  `,
+      components: {
+        'html-a-child': {
+          data() {
+            return {
+              message: "------1号父组件中的子组件"
+            }
+          },
+          template: `
+              <div>{{message}}</div>
+            `,
+        },
+        // 注册独立子组件
+        'html-child': childComponent,
+      },
+    })
+
+    // 2号父组件
+    Vue.component('html-b', {
+      data() {
+        return {
+          message: "2号父组件"
+        }
+      },
+      template: `
+      <div>
+        <div>{{message}}</div>
+        <html-b-child></html-b-child>
+      </div>
+  `,
+      components: {
+        // 注册独立子组件
+        "html-b-child": childComponent,
+      }
+    })
+
+
+    // 数据对象
+    const dataObj = {
+      message: "Hello Vue",
+    };
+
+    // 创建一个 Vue 对象。
+    const app = new Vue({
+      // el 是固定属性，通过 CSS 选择器挂载指定的元素
+      el: "#app",
+      // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+      data: dataObj,
+      // 计算属性以 computed 属性实现
+      computed: {},
+      // 方法定义以 methods 属性实现
+      methods: {},
+    });
+  </script>
+</body>
+
+</html>

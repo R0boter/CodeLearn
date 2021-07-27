@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>class 绑定</title>
+  <style>
+    .static {
+      color: red;
+    }
+
+    .active {
+      color: blue;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 这种方案会给模板插值带来一定的压力，所以可以将需要判断的定义在视图模型端 -->
+    <div class="static" v-bind:class="{active: isActive, bold: isBold}">{{message}}</div>
+    <div class="static" v-bind:class="isClass">{{message}}</div>
+    <!-- 数组方式，需要什么直接添加在中括号中，这里也可以在试图模型端用一个对象包含一组属性，比如可以直接在中括号中写 isClass -->
+    <div class="static" v-bind:class="[active, bold]">{{message}}</div>
+    <!-- 如果有复杂的业务计算，直接交给计算属性处理 -->
+    <div class="static" v-bind:class="classObject">{{message}}</div>
+  </div>
+
+  <script src="./js/vue.js"></script>
+  <script>
+    Vue.config.productionTip = false;
+
+    // 数据对象
+    const dataObj = {
+      message: "Hello Vue",
+      isActive: true,
+      isBold: true,
+      // 直接定义在试图模型端
+      isClass: {
+        // 变量名和上面 CSS 样式的 class 名一致
+        active: false,
+        bold: true,
+      },
+      active: "active",
+      bold: "bold",
+    };
+
+    // 创建一个 Vue 对象。
+    const app = new Vue({
+      // el 是固定属性，通过 CSS 选择器挂载指定的元素
+      el: "#app",
+      // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+      data: dataObj,
+      // 计算属性以 computed 属性实现
+      computed: {
+        classObject() {
+          return {
+            active: true,
+            bold: false,
+          };
+        },
+      },
+      // 方法定义以 methods 属性实现
+      methods: {},
+    });
+  </script>
+</body>
+
+</html>

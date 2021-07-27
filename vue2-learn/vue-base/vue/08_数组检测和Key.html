@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数组检测和Key</title>
+</head>
+
+<body>
+  <div id="app">
+    <!--
+      为了更好的渲染视图，Vue 提供以下变异方法，执行后可以渲染视图更新，而其他非变异方法，如直接给数组赋值，虽然数组的值发生了改变但不会立即更新渲染视图。
+      push()
+      pop()
+      shift()
+      unshift()
+      splice()
+      sort()
+      reverse()
+     -->
+    <ul>
+      <li v-for="item in array" v-bind:key="item.id"><input type="checkbox">{{item.city}}</li>
+    </ul>
+    <button v-on:click="add">添加</button>
+    <!--
+      当我们给开头位置添加一个数据，复选框会自动向上选定，被选中的复选框位置没变，但数据变了。
+      所以，正常情况应该复选框位置应该随着数据位置改变
+      使用 v-bind 绑定一个唯一值，一般使用 id ，作为提示
+     -->
+  </div>
+
+  <script src="./js/vue.js"></script>
+  <script>
+    Vue.config.productionTip = false;
+
+    // 数据对象
+    const dataObj = {
+      array: [
+        {
+          id: 1,
+          city: "北京"
+        },
+        {
+          id: 2,
+          city: "上海"
+        },
+        {
+          id: 3,
+          city: "深圳"
+        }
+      ]
+    };
+
+    // 创建一个 Vue 对象。
+    const app = new Vue({
+      // el 是固定属性，通过 CSS 选择器挂载指定的元素
+      el: "#app",
+      // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+      data: dataObj,
+      // 计算属性以 computed 属性实现
+      computed: {},
+      // 方法定义以 methods 属性实现
+      methods: {
+        add: function () {
+          this.array.unshift({ id: 4, city: "重庆" })
+        }
+      },
+    });
+  </script>
+</body>
+
+</html>

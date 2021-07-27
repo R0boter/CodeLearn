@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>表单输入绑定</title>
+</head>
+
+<body>
+  <div id="app">
+    <div>
+      <!-- 单行文本框 -->
+      <input type="text" placeholder="请输入内容" v-model="message">内容：{{message}}
+    </div>
+    <div>
+      <!-- 单个复选框 -->
+      <input type="checkbox" id="checkbox" v-model="checked">
+      <label for="checkbox">{{checked}}</label>
+    </div>
+    <div>
+      <!-- 多个复选框，通过绑定实现选择获取信息 -->
+      <input type="checkbox" id="a" value="Mr.Lee" v-model="checkedName">
+      <label for="a">Mr.Lee</label>
+
+      <input type="checkbox" id="b" value="Mr.Wang" v-model="checkedName">
+      <label for="b">Mr.Wang</label>
+
+      <input type="checkbox" id="c" value="Mr.Zhang" v-model="checkedName">
+      <label for="c">Mr.Zhang</label>
+
+      人员：{{checkedName}}
+    </div>
+
+    <div>
+      <!-- 单选框，还有点迷糊，后面重点看一下原理 -->
+      <input type="radio" id="one" v-model="gender" value="男">
+      <label for="one">男</label>
+      <input type="radio" id="two" v-model="gender" value="女">
+      <label for="two">女</label>
+      <br>
+      性别：{{gender}}
+    </div>
+
+    <div>
+      <!-- 下拉菜单，单选 -->
+      <select v-model="selected">
+        <option value="北京">北京</option>
+        <option value="上海">上海</option>
+        <option value="深圳">深圳</option>
+      </select>
+      城市：{{selected}}
+    </div>
+    <div>
+      <!-- 下拉菜单，多选 -->
+      <select v-model="selected2" multiple>
+        <option value="北京">北京</option>
+        <option value="上海">上海</option>
+        <option value="深圳">深圳</option>
+      </select>
+      城市：{{selected2}}
+    </div>
+  </div>
+
+  <script src="./js/vue.js"></script>
+  <script>
+    Vue.config.productionTip = false;
+
+    // 数据对象
+    const dataObj = {
+      message: "",
+      checked: false,
+      checkedName: [],
+      gender: "女",
+      selected: "",
+      selected2: [],
+    };
+
+    // 创建一个 Vue 对象。
+    const app = new Vue({
+      // el 是固定属性，通过 CSS 选择器挂载指定的元素
+      el: "#app",
+      // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+      data: dataObj,
+      // 计算属性以 computed 属性实现
+      computed: {},
+      // 方法定义以 methods 属性实现
+      methods: {},
+    });
+  </script>
+</body>
+
+</html>

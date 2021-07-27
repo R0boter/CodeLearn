@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>循环列表渲染</title>
+</head>
+
+<body>
+  <div id="app">
+    <div>{{message}}</div>
+    <ul>
+      <li v-for="item in array">{{item.city}}</li>
+    </ul>
+    <!-- 也可以在遍历元素项中设置 index，来获取下标，从 0 开始。index 需放在第二位，小括号可加可不加。 -->
+    <ul>
+      <li v-for="(item, index) in array">{{index}}.{{item.city}}</li>
+    </ul>
+    <!-- 也可以使用 JS 中的迭代器语法 -->
+    <ul>
+      <li v-for="(item, index) of array">{{index + 1}}.{{item.city}}</li>
+    </ul>
+    <!-- 也支持对对象的遍历 -->
+    <ul>
+      <li v-for="value in object">{{value}}</li>
+    </ul>
+    <!-- 对对象的遍历可以通过 name 获取到变量名，index 获取到下标，name 和 index 的位置在 value 之后 -->
+    <ul>
+      <li v-for="value, name, index in object">
+        {{index}}.{{name}}->{{value}}
+      </li>
+    </ul>
+    <!-- name 和 index 并非是指定关键字，而是通过所在位置确定的。最后一位是下标，而倒数第二位表示变量名。如下 test 表示 index，test2 表示 name -->
+    <ul>
+      <li v-for="value, test2, test in object">
+        {{test}}.{{test2}}->{{value}}
+      </li>
+    </ul>
+    <!-- v-for 也支持 template 进行区块渲染 -->
+    <ul>
+      <template v-for="value in array">
+        <li>{{value.city}}</li>
+        <li>------------</li>
+      </template>
+    </ul>
+    <!-- v-for 也支持数值进行循环 -->
+    <div v-for="n in 10">{{n}}</div>
+    <!-- 循环中使用 v-if 过滤数 -->
+    <!-- 但是应避免 v-for 和 v-if 在同一节点，因为 v-for 优先级比 v-if 高，每次循环都要重复执行一遍，造成性能浪费 -->
+    <ul>
+      <li v-for="item in array" v-if="flag">{{item.city}}</li>
+      <br />
+      <li v-for="item in array" v-if="item.city !== '上海'">{{item.city}}</li>
+    </ul>
+    <!-- 为避免性能浪费，将 v-if 放在 v-for 外层，但这样只能控制所有数据的判断 -->
+    <ul>
+      <template v-if="flag">
+        <li v-for="item in array">{{item.city}}</li>
+      </template>
+    </ul>
+    <!-- 要精确控制某一个的值的过滤，应该使用计算属性先进行过滤然后再进行渲染输出 -->
+    <ul>
+      <li v-for="item in arrayCity">{{item.city}}</li>
+    </ul>
+  </div>
+
+  <script src="./js/vue.js"></script>
+  <script>
+    Vue.config.productionTip = false;
+
+    // 数据对象
+    const dataObj = {
+      message: "Hello Vue",
+      flag: true,
+      array: [
+        {
+          city: "北京",
+        },
+        {
+          city: "上海",
+        },
+        {
+          city: "深圳",
+        },
+      ],
+      object: {
+        name: "Mr.Lee",
+        age: 100,
+        gender: "男",
+      },
+    };
+
+    // 创建一个 Vue 对象。
+    const app = new Vue({
+      // el 是固定属性，通过 CSS 选择器挂载指定的元素
+      el: "#app",
+      // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+      data: dataObj,
+      // 计算属性以 computed 属性实现
+      computed: {
+        arrayCity() {
+          // 这样直接操作会修改原本的值
+          this.array.splice(1, 1);
+          return this.array;
+        },
+      },
+      // 方法定义以 methods 属性实现
+      methods: {},
+    });
+  </script>
+</body>
+
+</html>

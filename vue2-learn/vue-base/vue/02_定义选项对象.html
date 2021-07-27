@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>定义选项对象</title>
+</head>
+
+<body>
+    <div id="app">
+        {{message}}
+        <button v-on:click="alert">点击</button>
+    </div>
+
+    <script src="./js/vue.js"></script>
+    <script>
+        Vue.config.productionTip = false
+
+        // 数据对象
+        const dataObj = {
+            message: 'Hello Vue'
+        }
+
+        // 数据冻结
+        //Object.freeze(dataObj);
+
+        // 创建一个 Vue 对象。
+        const app = new Vue({
+            // el 是固定属性，通过 CSS 选择器挂载指定的元素
+            el: '#app',
+            // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+            data: dataObj,
+            // 方法定义以 methods 属性实现
+            methods: {
+                alert: function () {
+                    alert('点击')
+                }
+            },
+            // 生命周期钩子
+            // 初始化后
+            created: function () {
+                console.log('初始化后：' + this.message)
+            },
+            // 数据修改后
+            updated: function () {
+                console.log('修改后：' + this.message)
+            }
+        })
+
+    </script>
+</body>
+
+</html>

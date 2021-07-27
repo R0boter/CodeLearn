@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算属性</title>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <!-- 第一种写法，当对插值进行操作时，直接利用模板操作，十分冗余，不推荐 -->
+            {{start}}{{message}}{{end}}
+        </div>
+        <div>
+            <!-- 第二种写法，定义一个方法返回操作后的值，但调用时是调用方法要加()，且多次调用时都会重新计算一遍，没有缓存机制，多次调用时浪费性能 -->
+            {{welcomeMethods()}}{{welcomeMethods()}}{{welcomeMethods()}}
+        </div>
+        <div>
+            <!-- 第三种写法，利用计算属性，调用时和调用属性一样直接写属性名就行，且多次调用有缓存机制：属性值未发生改变时直接调用缓存，不会再计算一遍 -->
+            {{welcome}}{{welcome}}{{welcome}}
+        </div>
+        <div>
+            <!-- 计算属性中有 getter 和 setter 两种，默认只有 getter，可以强行设置拥有 setter 功能 -->
+            {{caseTest}}{{caseTest}}{{caseTest}}
+        </div>
+    </div>
+
+    <script src="./js/vue.js"></script>
+    <script>
+        Vue.config.productionTip = false
+
+        // 数据对象
+        const dataObj = {
+            start: '[',
+            message: 'Hello Vue',
+            end: ']'
+        }
+
+        // 创建一个 Vue 对象。
+        const app = new Vue({
+            // el 是固定属性，通过 CSS 选择器挂载指定的元素
+            el: '#app',
+            // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+            data: dataObj,
+            // 计算属性以 computed 属性实现
+            computed: {
+                // ES6 简易写法
+                welcome() {
+                    console.log('执行了计算属性' + Math.random());
+                    return this.start + this.message + this.end;
+                },
+                // 正规写法，要使用 setter 必须使用完整写法，不能使用简易写法
+                caseTest: {
+                    get() {
+                        console.log('执行了计算属性中的 getter' + Math.random());
+                        return this.start + this.message + this.end;
+                    },
+                    set(value) {
+                        console.log('执行了计算属性中的 setter' + Math.random());
+                        this.start = value.split(',')[0];
+                        this.end = value.split(',')[1];
+                    }
+                }
+
+            },
+            // 方法定义以 methods 属性实现
+            methods: {
+                welcomeMethods() {
+                    console.log('执行了方法' + Math.random())
+                    return this.start + this.message + this.end
+                }
+            },
+        })
+
+    </script>
+</body>
+
+</html>

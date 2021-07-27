@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>组件的注册</title>
+</head>
+
+<body>
+  <div id="app">
+    <!--
+      组件的定义：组件时一种封装可复用的集合，通过组件化，将更好的完成繁杂的需求
+      组件化特点：
+        1. 拥有唯一性的组件名称，方便调用
+        2. 以组件名称为 HTML 元素标签形式存在，扩展了 HTML
+        3. 组件可以复用，且组件和组件之间互不干涉
+      注册组件，分为全局注册和局部注册，分为三步
+     -->
+
+    <!-- 第三步：调用全局组件 -->
+    <html-a></html-a>
+    <button-a></button-a>
+    <br>
+    <!-- 局部组件在哪个 Vue 实例中注册的就只能在哪个实例中调用 -->
+    <button-b></button-b>
+  </div>
+
+  <div id="app2">
+    <span>这是挂载的是另一个 Vue 实例</span>
+    <!-- 之前创建的都是全局组件，并进行的全局挂载，因此所有 Vue 实例都可以使用 -->
+    <br>
+    <button-a></button-a>
+    <br>
+    <button-c></button-c>
+  </div>
+
+  <script src="./js/vue.js"></script>
+  <script>
+    Vue.config.productionTip = false;
+
+    // 第一步：创建组件
+    // Vue.extend() 是一个基础构造器(全局API)，用于创建一个子类
+    const htmlElement = Vue.extend({
+      template: `
+        <div>
+          <h3>全局注册</h3>
+          <p>这个是全局注册</p>
+        </div>
+      `
+    })
+
+    // 创建一个局部组件
+    const buttonComponent = {
+      data() {
+        return {
+          count: 0,
+        }
+      },
+      template: `
+        <button v-on:click="count++">
+          局部组件b-点击量：{{count}}
+        </button>
+      `
+    }
+
+    // 第二步：全局注册组件
+    // Vue.component() 是注册组件，参数一为名称，即调用时的 HTML 元素名，参数二为 Vue.extend()，所以也可以省略上面 Vue.extend() 这一步，直接将构造的内容作为参数传递
+    // 组件名称强烈建议遵循 W3C 标准，字母小写且用 - 分隔，代码位置在 new Vue(); 之前
+    Vue.component('html-a', htmlElement);
+
+    // 第二种注册方法
+    Vue.component('button-a', {
+      // 组件中的 data 必须以函数形式定义，data 中包含的数据以 return 一个对象的方式返回出去
+      data() {
+        return {
+          count: 0
+        };
+      },
+      template: `
+        <button v-on:click="count++">
+          全局组件-点击量：{{count}}
+        </button>
+      `
+    })
+
+    // 数据对象
+    const dataObj = {
+      message: "Hello Vue",
+    };
+
+    // 创建一个 Vue 对象。
+    const app = new Vue({
+      // el 是固定属性，通过 CSS 选择器挂载指定的元素
+      el: "#app",
+      // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+      data: dataObj,
+      // 局部组件和全局组件的区别就在于，局部组件是在 Vue 实例中进行挂载
+      components: {
+        'button-b': buttonComponent,
+      },
+      // 计算属性以 computed 属性实现
+      computed: {},
+      // 方法定义以 methods 属性实现
+      methods: {},
+    });
+
+    const app2 = new Vue({
+      el: "#app2",
+      components: {
+        "button-c": {
+          data() {
+            return {
+              count: 0,
+            }
+          },
+          template: `
+            <button v-on:click="count++">
+              局部组件c-点击量：{{count}}
+            </button>
+          `
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>

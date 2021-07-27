@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>组件的props类型</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 默认传值时，不约束类型，所以一个属性可以绑定多种类型的值,也可以绑定多个值 -->
+    <html-a :text="message"></html-a>
+    <html-a :text="array"></html-a>
+    <html-a :text="array[2]"></html-a>
+    <html-a :text="object"></html-a>
+    <html-a :text="object.age"></html-a>
+    <html-a :text="flag"></html-a>
+    <html-a :text="!flag"></html-a>
+    <html-a :text="number"></html-a>
+    <html-a :text="number + '-----------' + message"></html-a>
+    <div>
+      -------------------------------------------------------------------------------------------------------------
+      <br>
+      下面是绑定多个 props 属性的值
+    </div>
+    <!-- 为了更好的布局，可以给 props 添加多个值来分别进行绑定 -->
+    <html-a :parent-array="array" :parent-object="object"></html-a>
+  </div>
+
+  <script src="./js/vue.js"></script>
+  <script>
+    Vue.config.productionTip = false;
+
+    // 数据对象
+    const dataObj = {
+      message: "Hello Vue",
+      array: [1, 2, 3, 4, 5],
+      object: {
+        'name': 'Mr.Lee',
+        'age': 18,
+        'gender': '男'
+      },
+      flag: true,
+      number: 100,
+    };
+
+    // 创建一个 Vue 对象。
+    const app = new Vue({
+      // el 是固定属性，通过 CSS 选择器挂载指定的元素
+      el: "#app",
+      // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+      data: dataObj,
+      components: {
+        'html-a': {
+          data() {
+            return {
+              message: "子组件"
+            }
+          },
+          // 布局只能在模板中进行
+          template: `
+            <div>
+              {{parentArray}}
+              {{text}}
+              {{parentObject}}
+            </div>
+          `,
+          props: ['text', 'parentArray', 'parentObject']
+        }
+      },
+      // 计算属性以 computed 属性实现
+      computed: {},
+      // 方法定义以 methods 属性实现
+      methods: {},
+    });
+  </script>
+</body>
+
+</html>

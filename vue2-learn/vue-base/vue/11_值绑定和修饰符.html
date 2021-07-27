@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>值绑定和修饰符</title>
+</head>
+
+<body>
+  <div id="app">
+    <div>
+      <!-- 使用 v-model 进行视图绑定后，虽然数据会进行更新，但标签里的 value 值并没有随之更新，使用 v-bind 进行值绑定 -->
+      <label for="checkbox">
+        <input type="checkbox" name="" id="checkbox" v-bind:value="checked" v-model="checked">
+        <span>{{checked}}</span>
+      </label>
+    </div>
+    <div>
+      <!-- 综合使用 -->
+      <label :for="'checked' + index" v-for="(item, index) in dataName">
+        <input type="checkbox" :id="'checked' + index" v-bind:value="item" v-model="checkedName">
+        <span>{{item}}</span>
+      </label>
+      <br>
+      人员：{{checkedName}}
+    </div>
+
+    <div>
+      <!--
+        修饰符
+        延迟触发，默认 v-model 绑定的数据是即时渲染的，使用延迟触发，可以在失去焦点后才渲染出来：.lazy
+        将输入的内容转换为 number 类型，实际就是 JS 中的内部转换，因此输入的内容开头是字符串的话，无法转换： .number
+        清理内容左右的空格：.trim
+      -->
+      <input type="text" name="" id="" v-model.lazy="message">
+      <span>{{message}}</span>
+      <br>
+      <input type="text" name="" id="" v-model.number="number">
+      <span>{{typeof number}}</span>
+      <br>
+      <input type="text" name="" id="" v-model.trim="message">
+      <span>{{message}}</span>
+    </div>
+  </div>
+
+  <script src="./js/vue.js"></script>
+  <script>
+    Vue.config.productionTip = false;
+
+    // 数据对象
+    const dataObj = {
+      message: "Hello Vue",
+      number: "",
+      checked: "",
+      checkedName: [],
+      dataName: [
+        "Mr.Lee",
+        "Mr.Wang",
+        "Mr.Zhang",
+      ]
+    };
+
+    // 创建一个 Vue 对象。
+    const app = new Vue({
+      // el 是固定属性，通过 CSS 选择器挂载指定的元素
+      el: "#app",
+      // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+      data: dataObj,
+      // 计算属性以 computed 属性实现
+      computed: {},
+      // 方法定义以 methods 属性实现
+      methods: {},
+    });
+  </script>
+</body>
+
+</html>

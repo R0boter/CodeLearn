@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>条件判断渲染</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- v-else-if 和 v-else 都必须跟在 v-if 的后面，否则无效 -->
+      <div v-if="flag">{{message}}</div>
+      <div v-else-if="flag === false">else-if</div>
+      <div v-else>else</div>
+      <template v-if="flag">
+        <label for="reg">注册</label>
+        <input type="text" id="reg" />
+      </template>
+      <template v-else>
+        <label for="login">登录</label>
+        <input type="text" id="login" />
+      </template>
+      <!-- v-show 只是单纯的给元素添加或删除了 display:none，且 v-show 指令不支持 template 和 v-else -->
+      <div v-show="flag">show</div>
+      <input type="button" value="切换" v-on:click="toggleIf" />
+    </div>
+
+    <script src="./js/vue.js"></script>
+    <script>
+      Vue.config.productionTip = false;
+
+      // 数据对象
+      const dataObj = {
+        message: "Hello Vue",
+        flag: false,
+      };
+
+      // 创建一个 Vue 对象。
+      const app = new Vue({
+        // el 是固定属性，通过 CSS 选择器挂载指定的元素
+        el: "#app",
+        // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+        data: dataObj,
+        // 计算属性以 computed 属性实现
+        computed: {},
+        // 方法定义以 methods 属性实现
+        methods: {
+          toggleIf: function () {
+            this.flag = !this.flag;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

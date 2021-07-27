@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>事件处理能力</title>
+</head>
+
+<body>
+  <div id="app">
+    <div>
+      <button @click="count += 1">增加</button>
+      <span>统计：{{count}}</span>
+    </div>
+    <div>
+      <button @click="greet">执行事件</button>
+    </div>
+    <div>
+      <!-- 传递参数时，如果要传递 event，在传参时填上 $event -->
+      <button @click="say('world!',$event)">传递参数</button>
+    </div>
+    <div @click="test('父元素', $event)">
+      <button @click="test('子元素', $event)">阻止冒泡</button>
+    </div>
+    <!--
+      Vue 内置了一些常用对象事件修饰符
+      阻止单击事件继续传播：v-on:click.stop
+      提交事件不再重载页面：v-on:submit.prevent
+      修饰符也可以串联：v-on:click.stop.prevent
+      只有修饰符：v-on:submit.prevent
+      添加事件监听器时使用事件捕获模式，即子元素触发的事件先在当前元素处理，再交给子元素处理：v-on:click.capture
+      只当在 event.target 是当前元素自身时触发处理函数，即事件不是从内部元素触发的：v-on:click.self
+      2.1.4新增，点击事件只触发一次：v-on:click.once
+      2.3.0新增，滚动事件的默认行为（即滚动行为）将会立即触发。而不会等待 onScroll 完成，这其中包含 event.preventDefault() 的情况：v-on:scroll.passive
+     -->
+    <div @click="stop('stop父元素')">
+      <button @click.stop="stop('stop子元素')">事件修饰</button>
+    </div>
+    <!--
+      Vue 还提供了按键事件修饰符
+      .enter/.tab/.delete/.esc/.space/.up/.down/.left/.right
+     -->
+    <div>
+      <input type="text" v-on:keyup.enter="submit">
+    </div>
+  </div>
+
+  <script src="./js/vue.js"></script>
+  <script>
+    Vue.config.productionTip = false;
+
+    // 数据对象
+    const dataObj = {
+      count: 0,
+    };
+
+    // 创建一个 Vue 对象。
+    const app = new Vue({
+      // el 是固定属性，通过 CSS 选择器挂载指定的元素
+      el: "#app",
+      // 数据定义以 data 属性实现，它的值是以一个对象形式存在，数据中的属性名和模板变量名一致
+      data: dataObj,
+      // 计算属性以 computed 属性实现
+      computed: {},
+      // 方法定义以 methods 属性实现
+      methods: {
+        // 执行事件，默认会传一个 event
+        greet(event) {
+          alert(event.target.innerText);
+        },
+        say: function (info, event) {
+          alert(event.target.innerText + info);
+        },
+        test(info) {
+          // 阻止事件冒泡
+          event.stopPropagation();
+          alert(info);
+        },
+        stop(info) {
+          alert(info);
+        },
+        submit() {
+          alert("enter")
+        }
+      },
+    });
+  </script>
+</body>
+
+</html>
